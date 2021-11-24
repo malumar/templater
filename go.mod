@@ -2,11 +2,6 @@ module github.com/malumar/templater
 
 go 1.17
 
-replace (
-	github.com/malumar/domaintools => ..\domaintools
-	github.com/malumar/strutils => ..\strutils
-)
-
 require (
 	github.com/malumar/domaintools v0.0.0-00010101000000-000000000000
 	github.com/malumar/strutils v0.0.0-00010101000000-000000000000
