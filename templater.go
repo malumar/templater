@@ -4,14 +4,14 @@ package templater
 
 import "fmt"
 
-// Zarejestruj tylko gdy nie istnieje lub zwróć błąd
+// Register only if it does not exist or return an error
 func Register(name string, f interface{}) error {
 	if !Exist(name) {
 		Overwrite(name, f)
 		return nil
 	}
 
-	return fmt.Errorf("templater: Funkcja jest już zarejestrowana")
+	return fmt.Errorf("templater: the feature is already registered")
 }
 
 func Exist(name string) bool {

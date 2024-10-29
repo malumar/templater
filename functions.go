@@ -234,7 +234,6 @@ func init() {
 			return "`"
 		},
 		"replaceString": func(old string, new string, searchIn string) string {
-			fmt.Println("searchIn=", searchIn, "old=", old, "new", new)
 			return strings.Replace(searchIn, old, new, -1)
 		},
 		"isNotLast": func(x int, a interface{}) bool {
@@ -281,7 +280,6 @@ func init() {
 		"reduceWhiteSpaces":     ReduceWhiteSpaces,
 	}
 
-	fmt.Printf("funkcje %v\n\n\n", functions)
 
 }
 

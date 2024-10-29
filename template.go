@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	htmltpl "html/template"
-	"io/ioutil"
 	"os"
 	texttpl "text/template"
 )
@@ -69,12 +68,12 @@ func newParser(err error, ishtml bool, name, content string) *Parser {
 }
 
 func TextFromFile(filename string) *Parser {
-	content, err := ioutil.ReadFile(filename)
+	content, err := os.ReadFile(filename)
 	return newParser(err, false, filename, string(content))
 }
 
 func HtmlFromFile(filename string) *Parser {
-	content, err := ioutil.ReadFile(filename)
+	content, err := os.ReadFile(filename)
 	return newParser(err, true, filename, string(content))
 }
 
@@ -111,28 +110,11 @@ func (p *Parser) Parse(data interface{}, dest *bytes.Buffer) (err error) {
 	if p.err != nil {
 		return p.err
 	}
-	/*
-		defer func(returnError *error) {
-			recovered:=false
-			if r := recover(); r != nil {
-				ERROR.Println("Mieliśmy recovery po panic!")
-				var ok bool
-				var err error
-				err, ok = r.(error)
-
-				if !ok {
-					err = fmt.Errorf("pkg: %v -- err %v", r)
-				}
-
-				*returnError = err
-				recovered=true
-			}
-	*/
 	defer func(returnError *error) {
 		if r := recover(); r != nil {
 			errx, ok := r.(error)
 			if !ok {
-				errx = fmt.Errorf("pkg: %v -- err %v", r)
+				errx = fmt.Errorf("pkg: recovery -- err %v", r)
 			}
 
 			*returnError = Recover{
