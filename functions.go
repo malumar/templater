@@ -1,16 +1,16 @@
 package templater
 
 import (
-	"html/template"
-	"golang.org/x/net/html"
-	"strings"
-	"reflect"
-	"log"
-	"time"
-	"github.com/malumar/strutils"
-	"github.com/malumar/domaintools"
 	"fmt"
+	"github.com/malumar/domaintools"
+	"github.com/malumar/strutils"
+	"golang.org/x/net/html"
+	"html/template"
+	"log"
+	"reflect"
 	"regexp"
+	"strings"
+	"time"
 )
 
 // Zamiana  "   Text   More here     "
@@ -20,6 +20,7 @@ func ReduceWhiteSpaces(input string) string {
 	final = re_inside_whtsp.ReplaceAllString(final, " ")
 	return final
 }
+
 // liczba monga
 func Plural(s string) string {
 	if len(s) == 0 {
@@ -40,7 +41,7 @@ func IsEmpty(v interface{}) bool {
 	tv := reflect.TypeOf(v)
 
 	vv := reflect.ValueOf(v)
-	switch(tv.Kind()) {
+	switch tv.Kind() {
 	case reflect.Map, reflect.Slice:
 		return vv.Len() == 0
 	case reflect.String:
@@ -110,6 +111,12 @@ func init() {
 				}
 			}
 			return nil
+		},
+		"printIfNotLast": func(index int, len int, what string) string {
+			if index+1 < len {
+				return fmt.Sprintf("%d z %d", index+1, len)
+			}
+			return ""
 		},
 		// Pads the given string with space up to the given width.
 		"pad_html": func(str string, width int) template.HTML {
@@ -186,7 +193,6 @@ func init() {
 		// liczba monga dla słów angielskich
 		"plural_en": Plural,
 
-
 		// Tekst -> tekst
 		"firstLower": FirstLower,
 		"firstUpper": FirstUpper,
@@ -214,20 +220,23 @@ func init() {
 			}
 		},
 
-		"toUpper": strings.ToUpper,
-		"toLower": strings.ToUpper,
+		"toUpper":   strings.ToUpper,
+		"toLower":   strings.ToLower,
 		"trimSpace": strings.TrimSpace,
 		"replaceNewLineToSpace": func(s string) string {
-			return strings.Replace(s,"\n", " ", -1)
+			return strings.Replace(s, "\n", " ", -1)
 		},
 		"removeWhiteSpace": func(s string) string {
-			return strings.Replace(strings.Replace(strings.Replace(s,"\n", "", -1),"	", "", -1)," ", "", -1)
+			return strings.Replace(strings.Replace(strings.Replace(s, "\n", "", -1), "	", "", -1), " ", "", -1)
 		},
 		// Znak `
 		"esc": func() string {
 			return "`"
 		},
-
+		"replaceString": func(old string, new string, searchIn string) string {
+			fmt.Println("searchIn=", searchIn, "old=", old, "new", new)
+			return strings.Replace(searchIn, old, new, -1)
+		},
 		"isNotLast": func(x int, a interface{}) bool {
 			return !IsLast(x, a)
 		},
@@ -258,24 +267,23 @@ func init() {
 		// zmiennaInna -> zmienna_Inna
 		// ZmiennnaInnaDruga -> Zmienna_Inna_Drug
 		"underScoreCase": strutils.UnderscoreCase,
-
+		"flatCase":       strutils.FlatCase,
 		// zamiana:
 		// zmienna -> ZMIENNA
 		// zmiennaInna -> ZMIENNA_INNA
 		// ZmiennnaInnaDruga -> ZMIENNA_INNA_DRUGA
 		"underScoreCaseUpper": strutils.UnderscoreCaseUpper,
+		"snakeCaseFirstLower": strutils.SnakeCaseFirstLower,
 		"safeHTML": func(s string) template.HTML {
 			return template.HTML(s)
 		},
-		"toSafeAsciiDomainName" : domaintools.SafeAsciiDomainName,
-		"reduceWhiteSpaces": ReduceWhiteSpaces,
+		"toSafeAsciiDomainName": domaintools.SafeAsciiDomainName,
+		"reduceWhiteSpaces":     ReduceWhiteSpaces,
 	}
-
 
 	fmt.Printf("funkcje %v\n\n\n", functions)
 
 }
 
 var re_leadclose_whtsp *regexp.Regexp = regexp.MustCompile(`^[\s\p{Zs}]+|[\s\p{Zs}]+$`)
-var re_inside_whtsp *regexp.Regexp =  regexp.MustCompile(`[\s\p{Zs}]{2,}`)
-
+var re_inside_whtsp *regexp.Regexp = regexp.MustCompile(`[\s\p{Zs}]{2,}`)

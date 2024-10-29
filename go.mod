@@ -1,9 +1,9 @@
 module github.com/malumar/templater
 
-go 1.17
+go 1.22.4
 
 require (
-	github.com/malumar/domaintools v0.0.0-00010101000000-000000000000
-	github.com/malumar/strutils v0.0.0-00010101000000-000000000000
-	golang.org/x/net v0.0.0-20211118161319-6a13c67c3ce4
+	github.com/malumar/domaintools v0.0.0-20241008121017-c780fcac9f2d
+	github.com/malumar/strutils v1.0.0
+	golang.org/x/net v0.30.0
 )

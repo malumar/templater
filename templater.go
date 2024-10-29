@@ -35,4 +35,3 @@ func DeleteByName(name string) {
 }
 
 var functions = map[string]interface{}{}
-
